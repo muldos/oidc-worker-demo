@@ -20,6 +20,11 @@ jobs:
          with:
            oidc-provider-name: ${{ env.OIDC_PROVIDER }}
            oidc-audience: ${{ env.OIDC_AUDIENCE }}
+       - name: Get OIDC token
+         run: |
+             OIDC_TOKEN=$(curl -sLS -H "User-Agent: actions/oidc-client" -H "Authorization: Bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" \
+             "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${{ env.OIDC_AUDIENCE }}" | jq .value | tr -d '"')
+             echo "OIDC_TOKEN=${OIDC_TOKEN}" >> $GITHUB_ENV           
        - name: Generate Access Token to call the worker
          run: |
            JFROG_ACCESS_TOKEN=$(jf atc --reference=true --expiry=600 --description="Token for Worker demo. Owner davidro" --grant-admin=true workerci-davidro | jq .reference_token | tr -d '"')
