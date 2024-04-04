@@ -40,7 +40,7 @@ jobs:
             customHeaders: '{"Content-Type": "application/json"}'
             data: |
               {
-                "foo": "bar"
+                "OIDC_TOKEN": "${{env.OIDC_TOKEN}}"
               }
        - name: Show Execution response
          run: |
