@@ -20,9 +20,8 @@ jobs:
          with:
            oidc-provider-name: ${{ env.OIDC_PROVIDER }}
            oidc-audience: ${{ env.OIDC_AUDIENCE }}
-       - name: Connectivity check
+       - name: Generate Access Token to call the worker
          run: |
-           jf rt ping
            JFROG_ACCESS_TOKEN=$(jf atc --reference=true --expiry=600 --description="Token for Worker demo. Owner davidro" --grant-admin=true workerci-davidro | jq .reference_token | tr -d '"')
            echo "JFROG_ACCESS_TOKEN=${JFROG_ACCESS_TOKEN}" >> $GITHUB_ENV
        - name: Call Custom Worker endpoint
